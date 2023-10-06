@@ -32,7 +32,12 @@ export default function Home() {
             />
           )}
           {view === "search" && <Search />}
-          {view === "library" && <Library />}
+          {view === "library" && (
+            <Library
+              setView={setView}
+              setGlobalPlaylistId={setGlobalPlaylistId}
+            />
+          )}
           {view === "artist" && <Artist />}
         </div>
       </main>

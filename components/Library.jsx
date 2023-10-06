@@ -2,9 +2,15 @@ import { ChevronDownIcon, PlayIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
-const Library = () =>{
+const Library = ({ setView, setGlobalPlaylistId }) =>{
     const { data: session } = useSession()
     const [playlists, setPlaylists] = useState([])
+
+    function selectPlaylist(playlist) {
+        setView("playlist")
+        setGlobalPlaylistId(playlist.id)
+    }
+
     useEffect(() => {
         async function f() {
             if (session && session.accessToken) {
