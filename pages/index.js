@@ -3,15 +3,17 @@ import Library from "@/components/Library";
 import PlaylistView from "@/components/PlaylistView";
 import Search from "@/components/Search";
 import Sidebar from "@/components/Sidebar";
+import Player from "@/components/Player";
+
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [view, setView] = useState("search"); // ["search", "library", "playlist", "artist"]
   const [globalPlaylistId, setGlobalPlaylistId] = useState(null);
-  // const [globalArtistId, setGlobalArtistId] = useState(null);
-  // const [globalCurrentSongId, setGlobalCurrentSongId] = useState(null);
-  // const [globalIsTrackPlaying, setGlobalIsTrackPlaying] = useState(false);
+  const [globalArtistId, setGlobalArtistId] = useState(null);
+  const [globalCurrentSongId, setGlobalCurrentSongId] = useState(null);
+  const [globalIsTrackPlaying, setGlobalIsTrackPlaying] = useState(false);
 
   return (
     <>
@@ -23,14 +25,25 @@ export default function Home() {
             setGlobalPlaylistId={setGlobalPlaylistId}
           />
           {view === "playlist" && (
-            <PlaylistView globalPlaylistId={globalPlaylistId} />
+            <PlaylistView
+              globalPlaylistId={globalPlaylistId}
+              setGlobalCurrentSongId={setGlobalCurrentSongId}
+              setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+            />
           )}
           {view === "search" && <Search />}
           {view === "library" && <Library />}
           {view === "artist" && <Artist />}
         </div>
       </main>
-      <div className="sticky z-20 bottom-0 h-24 w-full bg-red-100">Player</div>
+      <div className="sticky z-20 bottom-0 w-full ">
+        <Player
+          globalCurrentSongId={globalCurrentSongId}
+          setGlobalCurrentSongId={setGlobalCurrentSongId}
+          setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+          globalIsTrackPlaying={globalIsTrackPlaying}
+        />
+      </div>
     </>
   );
 }

@@ -14,7 +14,7 @@ const colors = [
     'from-purple-500'
 ]
 
-const PlaylistView = ({ globalPlaylistId }) =>{
+const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) =>{
     const { data: session } = useSession()
     const [playlistData, setPlaylistData] = useState(null)
     const [color, setColor] = useState(colors[0])
@@ -85,6 +85,8 @@ const PlaylistView = ({ globalPlaylistId }) =>{
                     {playlistData?.tracks.items.map((track, i) => {
                         // song component
                         return <Song
+                            setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+                            setGlobalCurrentSongId={setGlobalCurrentSongId}
                             key={track.track.id}
                             sno={i}
                             track={track.track}
