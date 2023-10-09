@@ -1,3 +1,4 @@
+import { CurrentlyPauseSpotify, CurrentlyPlayingSpotify, SongInfoSpotify,CurrentlyPlaySpotify } from "@/Services/SpotifyCore";
 import { PlayCircleIcon,PauseCircleIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
@@ -8,22 +9,25 @@ const Player = ({ globalCurrentSongId, setGlobalCurrentSongId, globalIsTrackPlay
 
     async function fetchSongInfo(trackId) {
         if (trackId) {
-            const response = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
-                headers: {
-                    Authorization: `Bearer ${session.accessToken}`
-                }
-            })
+            // const response = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
+            //     headers: {
+            //         Authorization: `Bearer ${session.accessToken}`
+            //     }
+            // })
+            const response = await SongInfoSpotify(session.accessToken,trackId)
             const data = await response.json()
             setSongInfo(data)
         }
     }
 
     async function getCurrentlyPlaying() {
-        const response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-            headers: {
-                Authorization: `Bearer ${session.accessToken}`
-            }
-        })
+        // const response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
+        //     headers: {
+        //         Authorization: `Bearer ${session.accessToken}`
+        //     }
+        // })
+        const response =  await CurrentlyPlayingSpotify(session.accessToken)
+
         if (response.status == 204) {
             console.log("204 response from currently playing")
             return;
@@ -36,22 +40,24 @@ const Player = ({ globalCurrentSongId, setGlobalCurrentSongId, globalIsTrackPlay
         if (session && session.accessToken) {
             const data = await getCurrentlyPlaying()
             if (data.is_playing) {
-                const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
-                    method: "PUT",
-                    headers: {
-                        Authorization: `Bearer ${session.accessToken}`
-                    }
-                })
+                // const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
+                //     method: "PUT",
+                //     headers: {
+                //         Authorization: `Bearer ${session.accessToken}`
+                //     }
+                // })
+                const response = await CurrentlyPauseSpotify(session.accessToken)
                 if (response.status == 204) {
                     setGlobalIsTrackPlaying(false)
                 }
             } else {
-                const response = await fetch("https://api.spotify.com/v1/me/player/play", {
-                    method: "PUT",
-                    headers: {
-                        Authorization: `Bearer ${session.accessToken}`
-                    }
-                })
+                // const response = await fetch("https://api.spotify.com/v1/me/player/play", {
+                //     method: "PUT",
+                //     headers: {
+                //         Authorization: `Bearer ${session.accessToken}`
+                //     }
+                // })
+                const response = await CurrentlyPlaySpotify(session.accessToken)
                 if (response.status == 204) {
                     setGlobalIsTrackPlaying(true)
                     setGlobalCurrentSongId(data.item.id)

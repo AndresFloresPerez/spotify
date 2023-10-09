@@ -1,3 +1,4 @@
+import { CurrentlyPlaySpotify } from '@/Services/SpotifyCore';
 import { PlayIcon } from '@heroicons/react/24/solid';
 import { useSession } from 'next-auth/react';
 import React from 'react';
@@ -9,15 +10,16 @@ const SearchResults = ({ playlists, songs, artists, setView, setGlobalPlaylistId
         setGlobalCurrentSongId(track.id)
         setGlobalIsTrackPlaying(true)
         if (session && session.accessToken) {
-            const response = await fetch("https://api.spotify.com/v1/me/player/play", {
-                method: "PUT",
-                headers: {
-                    Authorization: `Bearer ${session.accessToken}`
-                },
-                body: JSON.stringify({
-                    uris: [track.uri]
-                })
-            })
+            // const response = await fetch("https://api.spotify.com/v1/me/player/play", {
+            //     method: "PUT",
+            //     headers: {
+            //         Authorization: `Bearer ${session.accessToken}`
+            //     },
+            //     body: JSON.stringify({
+            //         uris: [track.uri]
+            //     })
+            // })
+            const response = await CurrentlyPlaySpotify(session.accessToken,track.uri)
             console.log("on play", response.status)
         }
     }
@@ -53,9 +55,9 @@ const SearchResults = ({ playlists, songs, artists, setView, setGlobalPlaylistId
                                 <PlayIcon className='h-6 w-6 text-black' />
                             </div>
                             {playlists && <>
-                                <img className='h-28 w-28 rounded' src={playlists[0].images[0].url} />
+                                <img className='h-28 w-28 rounded' src={playlists[0]?.images[0].url} />
                                 <p className='text-3xl font-bold'>{playlists[0].name}</p>
-                                <p className='text-sm text-neutral-400'>By {playlists[0].owner.display_name} <span className='rounded-full bg-neutral-900 text-white font-bold ml-4 py-1 px-4'>Playlist</span></p>
+                                <p className='text-sm text-neutral-400'>By {playlists[0]?.owner.display_name} <span className='rounded-full bg-neutral-900 text-white font-bold ml-4 py-1 px-4'>Playlist</span></p>
                             </>}
                         </div>
                     </div>

@@ -1,3 +1,4 @@
+import { featuredSpotify } from '@/Services/SpotifyCore';
 import { PlayIcon } from '@heroicons/react/24/solid';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
@@ -14,13 +15,14 @@ const FeaturedPlaylists = ({ setView, setGlobalPlaylistId }) => {
     useEffect(() => {
         async function f() {
             if (session && session.accessToken) {
-                const response = await fetch("https://api.spotify.com/v1/browse/featured-playlists?" + new URLSearchParams({
-                    country: "US"
-                }), {
-                    headers: {
-                        Authorization: `Bearer ${session.accessToken}`
-                    }
-                })
+                // const response = await fetch("https://api.spotify.com/v1/browse/featured-playlists?" + new URLSearchParams({
+                //     country: "US"
+                // }), {
+                //     headers: {
+                //         Authorization: `Bearer ${session.accessToken}`
+                //     }
+                // })
+                const response = await featuredSpotify(session.accessToken)
                 const data = await response.json()
                 setPlaylists(data.playlists.items)
             }

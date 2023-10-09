@@ -1,3 +1,4 @@
+import { albumsSpotify } from "@/Services/SpotifyCore";
 import { ChevronDownIcon, PlayIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
@@ -14,11 +15,12 @@ const Library = ({ setView, setGlobalPlaylistId }) =>{
     useEffect(() => {
         async function f() {
             if (session && session.accessToken) {
-                const response = await fetch("https://api.spotify.com/v1/me/playlists", {
-                    headers: {
-                        Authorization: `Bearer ${session.accessToken}`
-                    }
-                })
+                const response = await albumsSpotify(session.accessToken)
+                // const response = await fetch("https://api.spotify.com/v1/me/playlists", {
+                //     headers: {
+                //         Authorization: `Bearer ${session.accessToken}`
+                //     }
+                // })
                 const data = await response.json()
                 setPlaylists(data.items)
             }
