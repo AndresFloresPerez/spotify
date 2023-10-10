@@ -1,8 +1,9 @@
+import { CurrentlyPlaySpotify } from '@/Services/SpotifyCore';
 import { PlayIcon } from '@heroicons/react/24/solid';
 import { useSession } from 'next-auth/react';
 import React, { useState } from "react";
 
-const Song = ({ sno, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) =>{
+const Song = ({  sno, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setView, setGlobalArtistId }) =>{
     const { data: session } = useSession()
     const [hover, setHover] = useState(false)
 
@@ -10,15 +11,16 @@ const Song = ({ sno, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) =
         setGlobalCurrentSongId(track.id)
         
         if (session && session.accessToken) {
-            const response = await fetch("https://api.spotify.com/v1/me/player/play", {
-                method: "PUT",
-                headers: {
-                    Authorization: `Bearer ${session.accessToken}`
-                },
-                body: JSON.stringify({
-                    uris: [track.uri]
-                })
-            })
+            // const response = await fetch("https://api.spotify.com/v1/me/player/play", {
+            //     method: "PUT",
+            //     headers: {
+            //         Authorization: `Bearer ${session.accessToken}`
+            //     },
+            //     body: JSON.stringify({
+            //         uris: [track.uri]
+            //     })
+            // })
+            const response = await  CurrentlyPlaySpotify(session.accessToken,track.uri)
             console.log("on play", response.status)
         }
     }
@@ -32,9 +34,13 @@ const Song = ({ sno, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) =
                 minutes + ":" + (seconds < 10 ? "0" : "") + seconds
         );
     }
+    function selectArtist(artist) {
+        setView("artist")
+        setGlobalArtistId(artist.id)
+    }
 
     return (
-        <div onClick={() =>  playSong(track)} 
+        <div 
             onMouseEnter={() => setHover(true)} 
             onMouseLeave={() => setHover(false)}  
             className="grid grid-cols-2 text-neutral-400 text-sm py-4 px-5 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-default">

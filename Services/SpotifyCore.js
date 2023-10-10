@@ -64,7 +64,7 @@ export const CurrentlyPauseSpotify = async (access_token) => {
 export const featuredSpotify = async (access_token) => {
   //const { access_token } = await getAccessToken();
 
-  return fetch(
+  return await fetch(
     "https://api.spotify.com/v1/browse/featured-playlists?" +
       new URLSearchParams({
         country: "US",
@@ -75,4 +75,58 @@ export const featuredSpotify = async (access_token) => {
       },
     }
   );
+};
+
+export const ArtistSpotify = async (access_token, globalArtistId) => {
+  //const { access_token } = await getAccessToken();
+  return fetch(`https://api.spotify.com/v1/artists/${globalArtistId}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+};
+
+export const getTopTracks = async (access_token, globalArtistId) => {
+  const response = await fetch(
+    `https://api.spotify.com/v1/artists/${globalArtistId}/top-tracks?` +
+      new URLSearchParams({ market: "US" }),
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  const data = await response.json();
+  return data.tracks;
+};
+
+export const getRelatedArtists = async (access_token, globalArtistId) => {
+  const response = await fetch(
+    `https://api.spotify.com/v1/artists/${globalArtistId}/related-artists`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  const data = await response.json();
+  return data.artists;
+};
+
+export const SearchSpotify = async (access_token, query) => {
+  const response = await fetch(
+    "https://api.spotify.com/v1/search?" +
+      new URLSearchParams({
+        q: query,
+        type: ["artist", "playlist", "track"],
+      }),
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  const data = await response.json();
+
+  return data;
 };

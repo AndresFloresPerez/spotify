@@ -1,6 +1,6 @@
 import { albumsSpotify } from "@/Services/SpotifyCore";
 import { ChevronDownIcon, PlayIcon } from "@heroicons/react/24/outline";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 const Library = ({ setView, setGlobalPlaylistId }) =>{

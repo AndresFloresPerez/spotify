@@ -1,8 +1,9 @@
 import { ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import React, { useEffect, useRef, useState } from "react";
 import FeaturedPlaylists from "./FeaturedPlaylists";
 import SearchResults from "./SearchResults";
+import { SearchSpotify } from "@/Services/SpotifyCore";
 
 const Search = ({ setView, setGlobalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setGlobalArtistId }) =>{
     const { data: session } = useSession()
@@ -10,16 +11,17 @@ const Search = ({ setView, setGlobalPlaylistId, setGlobalCurrentSongId, setGloba
     const [inputValue, setInputValue] = useState('')
     const inputRef = useRef(null)
     async function updateSearchResults(query) {
-        const response = await fetch("https://api.spotify.com/v1/search?" + new URLSearchParams({
-            q: query,
-            type: ["artist", "playlist", "track"]
-        }), {
-            headers: {
-                Authorization: `Bearer ${session.accessToken}`
-            }
-        })
-        const data = await response.json()
-        setSearchData(data)
+        // const response = await fetch("https://api.spotify.com/v1/search?" + new URLSearchParams({
+        //     q: query,
+        //     type: ["artist", "playlist", "track"]
+        // }), {
+        //     headers: {
+        //         Authorization: `Bearer ${session.accessToken}`
+        //     }
+        // })
+        // const data = await response.json()
+
+        setSearchData(await SearchSpotify(session.accessToken,query))
     }
 
     useEffect(() => {
