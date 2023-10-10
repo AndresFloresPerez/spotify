@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <>
-      <main className="flex w-full h-screen overflow-hidden bg-black">
+      <main className="h-screen overflow-hidden bg-black">
         <div className="flex w-full">
           <Sidebar
             view={view}
@@ -58,15 +58,15 @@ export default function Home() {
             />
           )}
         </div>
+        <div className="sticky z-20 bottom-0 w-full ">
+          <Player
+            globalCurrentSongId={globalCurrentSongId}
+            setGlobalCurrentSongId={setGlobalCurrentSongId}
+            setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+            globalIsTrackPlaying={globalIsTrackPlaying}
+          />
+        </div>
       </main>
-      <div className="sticky z-20 bottom-0 w-full ">
-        <Player
-          globalCurrentSongId={globalCurrentSongId}
-          setGlobalCurrentSongId={setGlobalCurrentSongId}
-          setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
-          globalIsTrackPlaying={globalIsTrackPlaying}
-        />
-      </div>
     </>
   );
 }
