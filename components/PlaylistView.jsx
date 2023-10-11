@@ -42,14 +42,12 @@ const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTra
     useEffect(() => {
         async function f() {
             if (session && session.accessToken) {
-                console.log(session)
                 const response = await fetch(`https://api.spotify.com/v1/playlists/${globalPlaylistId}`, {
                     headers: {
                         Authorization: `Bearer ${session.accessToken}`
                     }
                 })
                 const data = await response.json()
-                console.log(data)
                 setPlaylistData(data)
             }
         }

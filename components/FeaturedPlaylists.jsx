@@ -22,7 +22,6 @@ const FeaturedPlaylists = ({ setView, setGlobalPlaylistId }) => {
                 //         Authorization: `Bearer ${session.accessToken}`
                 //     }
                 // })
-               
                 const response = await featuredSpotify(session.accessToken)
                 const data = await response.json()
                 setPlaylists(data.playlists.items)
